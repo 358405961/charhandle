@@ -45,18 +45,18 @@ do
 
         if [ "$words" == "${INPUT[$i]}" ] 
         then
-            if [ "$is_verb" == "v"  ] || [ "$is_verb" == ""  ]
+
+            if [ "$is_verb" != ""  ] || [ "$words_property" == ""  ]
             then 
-                echo -e "$words""\t""$words_level" >> "$input_file.include"
-            else
-                echo -e "$words""\t""$words_level" >> "$input_file.exclude"
+                flag=1
             fi
-            flag=1
             continue
         fi
     done
     if [ $flag -eq 0 ]
     then
         echo -e "${INPUT[$i]}" >> "$input_file.exclude"
+    else
+        echo -e "$words""\t""$words_level" >> "$input_file.include"
     fi
 done
