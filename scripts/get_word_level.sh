@@ -14,11 +14,12 @@ do
 done
 IFS=$ifs
 
-rm -f words.exclude words.include
+rm -f "$input_file.exclude" "$input_file.include"
 
 input_len=${#INPUT[*]}  
 for((i=0;i<$input_len;i=i+1)) 
 do
+    flag=0
     k=0
     ifs=$IFS
     IFS=$'\n'
@@ -32,7 +33,8 @@ do
     words_len=$k
     if [ $k -eq 0  ]
     then
-        echo -e "${INPUT[$i]}" >> words.exclude
+        echo -e "${INPUT[$i]}" >> "$input_file.exclude"
+        continue
     fi
     for((j=0;j<$words_len;j=j+1))
     do
@@ -43,12 +45,18 @@ do
 
         if [ "$words" == "${INPUT[$i]}" ] 
         then
-            if [ "$is_verb" == "v"  ]
+            if [ "$is_verb" == "v"  ] || [ "$is_verb" == ""  ]
             then 
-                echo -e "$words""\t""$words_level" >> words.include
+                echo -e "$words""\t""$words_level" >> "$input_file.include"
             else
-                echo -e "$words""\t" >> words.exclude
+                echo -e "$words""\t""$words_level" >> "$input_file.exclude"
             fi
+            flag=1
+            continue
         fi
     done
+    if [ $flag -eq 0 ]
+    then
+        echo -e "${INPUT[$i]}" >> "$input_file.exclude"
+    fi
 done
