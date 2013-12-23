@@ -14,6 +14,8 @@ do
 done
 IFS=$ifs
 
+rm -f words.exclude words.include
+
 input_len=${#INPUT[*]}  
 for((i=0;i<$input_len;i=i+1)) 
 do
@@ -30,7 +32,7 @@ do
     words_len=$k
     if [ $k -eq 0  ]
     then
-        echo -e "${INPUT[$i]}"
+        echo -e "${INPUT[$i]}" >> words.exclude
     fi
     for((j=0;j<$words_len;j=j+1))
     do
@@ -39,9 +41,14 @@ do
         words_level=`echo ${WORDS[$j]} | awk '{print $3}'`
         is_verb=`echo $words_property | grep "v"`
 
-        if [ $words == ${INPUT[$i]} ] && [ "$is_verb" == "v"  ]
+        if [ "$words" == "${INPUT[$i]}" ] 
         then
-            echo -e "$words""\t""$words_level"
+            if [ "$is_verb" == "v"  ]
+            then 
+                echo -e "$words""\t""$words_level" >> words.include
+            else
+                echo -e "$words""\t" >> words.exclude
+            fi
         fi
     done
 done
