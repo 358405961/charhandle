@@ -20,7 +20,7 @@ printf "$line""\t"
             ifs=$IFS
             IFS=$'\n'
             flag=0
-            for lin in `grep  "$word_cxt" $words_file`
+            for lin in `grep  "^""$word_cxt"" " $words_file`
             do
                 lin_word=`echo $lin | awk '{print $1}'`
                 lin_prop=`echo $lin | awk '{print $2}'`

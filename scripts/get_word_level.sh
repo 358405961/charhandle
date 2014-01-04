@@ -23,7 +23,7 @@ do
     k=0
     ifs=$IFS
     IFS=$'\n'
-    for line in `grep  "${INPUT[$i]}" $words_file`
+    for line in `grep  -G "^""${INPUT[$i]}"" " $words_file`
     do
         WORDS[k]=$line
         k=`expr $k + 1`
