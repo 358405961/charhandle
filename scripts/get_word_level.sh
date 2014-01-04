@@ -36,6 +36,10 @@ do
         echo -e "${INPUT[$i]}" >> "$input_file.exclude"
         continue
     fi
+    if [ $k -gt 1 ]
+    then
+        echo "${INPUT[$i]}  $k"
+    fi
     for((j=0;j<$words_len;j=j+1))
     do
         words=`echo ${WORDS[$j]} | awk '{print $1}'`
@@ -45,8 +49,10 @@ do
 
         if [ "$words" == "${INPUT[$i]}" ] 
         then
-
-            if [ "$is_verb" != ""  ] || [ "$words_property" == ""  ]
+            if [ $words_len -eq 1 ]
+            then
+                flag=1
+            elif [ "$is_verb" != ""  ] || [ "$words_property" == ""  ]
             then 
                 flag=1
             fi
