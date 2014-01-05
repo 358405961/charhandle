@@ -30,8 +30,10 @@ do
             ifs=$IFS
             IFS=$'\n'
             flag=0
+            len=0
             for lin in `grep  "^""$word_cxt"" " $words_file`
             do
+                len=`expr $len + 1`
                 lin_word=`echo $lin | awk '{print $1}'`
                 lin_prop=`echo $lin | awk '{print $2}'`
                 lin_lvl=`echo $lin | awk '{print $3}'`
@@ -59,7 +61,7 @@ do
                 fi
             done
             IFS=$ifs
-            if [ $flag -eq 0 ]
+            if [ $flag -eq 0 ] && [ $len -ne 1 ]
             then
                 printf "$word_cxt/$word_orgprop"
                 printf "x "
