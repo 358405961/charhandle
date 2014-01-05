@@ -4,17 +4,27 @@ input_file=$1
 words_file=$2
 letter_file=$3
 
-while read line
+while read orgline
 do
-printf "$line""\t"
+    line=`echo $orgline | awk '{gsub(/.\/w/, ""); print $0}'`
+    printf "$line""\t"
     for word in $line
     do
         word_cxt=${word%%/*}
-        word_prop=${word##*/}
-        if [ "$word" == "$word_prop" ]
+        word_orgprop=${word##*/}
+        if [ "$word" == "$word_orgprop" ]
         then
             word_prop="v"
+        elif [ "$word_orgprop" == "t" ] || [ "$word_orgprop" == "f" ] || [ "$word_orgprop" == "s" ]
+        then
+            word_prop="n"
+        elif [ "$word_orgprop" != "y" ]
+        then
+            word_prop="u"
+        else
+            word_prop=$word_orgprop
         fi
+
         if [ "word_prop" != "g" ] && [ "$word_prop" != "x" ]
         then
             ifs=$IFS
@@ -40,7 +50,7 @@ printf "$line""\t"
                        printf ""
                        break
                     else
-                       #printf "$word_cxt/$word_prop"
+                       #printf "$word_cxt/$word_orgprop"
                        #printf "x "
                        continue
                     fi
@@ -51,7 +61,7 @@ printf "$line""\t"
             IFS=$ifs
             if [ $flag -eq 0 ]
             then
-                printf "$word_cxt/$word_prop"
+                printf "$word_cxt/$word_orgprop"
                 printf "x "
             fi
             #printf "\n"
