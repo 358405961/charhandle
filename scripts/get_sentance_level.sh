@@ -6,7 +6,7 @@ letter_file=$3
 
 while read orgline
 do
-    line=`echo $orgline | awk '{gsub(/.\/w/, ""); print $0}'`
+    line=`printf "$orgline" | awk '{gsub(/.\/w/, ""); print $0}'`
     printf "$line""\t"
     for word in $line
     do
@@ -66,7 +66,7 @@ do
             fi
             #printf "\n"
         else
-            printf "$word_cxt $word_prop"
+            #printf "$word_cxt $word_prop"
             lin=`grep  "$word_cxt" $letter_file`
             lin_word=`echo $lin | awk '{print $1}'`
             lin_lvl=`echo $lin | awk '{print $2}'`
