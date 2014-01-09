@@ -52,7 +52,7 @@ do
             if [ $words_len -eq 1 ]
             then
                 flag=1
-            elif [ "$is_verb" != ""  ] || [ "$words_property" == ""  ]
+            elif [ "$is_verb" != ""  ] || [ "$words_level" == ""  ]
             then 
                 flag=1
             fi
