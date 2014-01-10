@@ -7,7 +7,7 @@ letter_file=$3
 while read orgline
 do
     line=`printf "$orgline" | awk '{gsub(/.\/w/, ""); print $0}'`
-    printf "$line""\t"
+    printf "$orgline""\t"
     for word in $line
     do
         word_cxt=${word%%/*}
