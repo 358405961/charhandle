@@ -90,7 +90,7 @@ word_handle(Word, Prop, WordsTab, LetterTab) ->
         letter -> [] =/= ets:lookup(LetterTab, Word);
         any -> [] =/= ets:lookup(WordsTab, Word);
         "w" -> true;
-        _ ->
+        P ->
             [] =/=
             lists:foldl(fun({X, Y, Z}, Acc) -> 
                             case Y of
@@ -98,7 +98,7 @@ word_handle(Word, Prop, WordsTab, LetterTab) ->
                                 _ ->
                                     case X =:= Word of
                                         true ->
-                                            case lists:usort(Y++Prop) =:= lists:usort(Y) of
+                                            case lists:usort(Y++P) =:= lists:usort(Y) of
                                                 true -> [{X, Y} | Acc];
                                                 _ -> Acc
                                             end;
