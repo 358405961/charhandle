@@ -55,7 +55,7 @@ file_handle(InputFd, OutputFd, WordsTab, LetterTab) ->
         {ok, Line} ->
             {Word, WordList} = line_parse(Line),
             Exclude = line_handle(WordList, OutputFd, WordsTab, LetterTab),
-            ELine = make_line(Exclude, []),
+            ELine = make_line(Line, Exclude),
             case ELine of
                 "\n" -> ok;
                 _ -> ok = file:write(OutputFd, unicode:characters_to_binary(ELine))
@@ -65,10 +65,17 @@ file_handle(InputFd, OutputFd, WordsTab, LetterTab) ->
         _ -> error
     end.
 
-make_line([], Acc) ->
-    Acc++"\n";
-make_line([{W, P} | Rest], Acc) ->
-    make_line(Rest, W++"/"++P++" "++Acc).
+make_line(Line, Exclude) ->
+    VerbExclude = [{W, P} || {W, P} <- Exclude, P =:= "v"],
+    OtherExclude = [{W, P} || {W, P} <- Exclude, P =/= "v"],
+    LineWithVerb = make_line_internal(Line, VerbExclude, []),
+    ELine = make_line_internal(LineWithVerb, OtherExclude, []),
+    ELine.
+
+make_line_internal(Line, [], Acc) ->
+    (Line--"\n")++"\t"++Acc++"\n";
+make_line_internal(Line, [{W, P} | Rest], Acc) ->
+    make_line_internal(Line, Rest, W++"/"++P++" "++Acc).
 
 line_parse(Line) ->
     L1 = string:tokens(Line, [32, 13, 10, 9]),
